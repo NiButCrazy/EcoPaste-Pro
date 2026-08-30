@@ -291,6 +291,7 @@ const StandardMode = () => {
             name="i-lets-icons:setting-alt-line"
             onClick={() => {
               showWindow("preference");
+              // alert("showWindow");
             }}
             title={t("clipboard.button.setting")}
           />

@@ -1,5 +1,5 @@
-import MDEditor from "@uiw/react-md-editor";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+import MDEditor from "@uiw/react-md-editor";
 import { useBoolean } from "ahooks";
 import { Form, Input, Modal, Select } from "antd";
 import { find } from "es-toolkit/compat";
@@ -201,8 +201,11 @@ const EditModal = forwardRef<EditModalRef>((_, ref) => {
 
     try {
       await setWindowActiveMode(true);
-      getCurrentWebviewWindow().setFocus().catch(() => {});
+      getCurrentWebviewWindow()
+        .setFocus()
+        .catch(() => {});
     } catch (e) {
+      // biome-ignore lint/suspicious/noConsole: <暂时允许>
       console.error("[EditModal] activateWindowForEditing error:", e);
     }
   };
@@ -283,7 +286,7 @@ const EditModal = forwardRef<EditModalRef>((_, ref) => {
   return (
     <Modal
       centered
-      destroyOnClose
+      destroyOnHidden
       onCancel={setFalse}
       onOk={handleOk}
       open={open}
