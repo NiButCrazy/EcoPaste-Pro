@@ -23,8 +23,8 @@ html {
     }
 
     ::selection {
-      background-color: #4096ff;
-      color: #fff;
+      // color: #fff;
+      background-color: rgba($color: #4096ff, $alpha: 0.4);
     }
 
     mark {
@@ -96,4 +96,9 @@ html {
   .ant-input-group-addon:hover .webdav-test {
     color: var(--ant-color-primary);
   }
+}
+
+
+.nbc-icon {
+  display: none;
 }

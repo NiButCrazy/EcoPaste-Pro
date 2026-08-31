@@ -252,7 +252,7 @@ const Header: FC<HeaderProps> = (props) => {
         {hasRenderableSourceIcon && data.sourceAppIcon && (
           <img
             alt={data.sourceAppName}
-            className="h-3.5 w-3.5 flex-shrink-0 rounded-sm object-contain"
+            className="nbc-icon h-3.5 w-3.5 flex-shrink-0 rounded-sm object-contain"
             src={data.sourceAppIcon}
             title={data.sourceAppName}
           />
@@ -262,7 +262,7 @@ const Header: FC<HeaderProps> = (props) => {
           (shouldUseRemoteDeviceIcon ? (
             <img
               alt={data.sourceAppName}
-              className="h-3.5 w-3.5 flex-shrink-0 rounded-sm object-contain opacity-85"
+              className="nbc-icon h-3.5 w-3.5 flex-shrink-0 rounded-sm object-contain opacity-85"
               src={REMOTE_SOURCE_ICON}
               title={data.sourceAppName}
             />

@@ -47,8 +47,8 @@
       "html": "HTML",
       "image": "图片",
       "link": "链接",
-      "n_chars": "{{0}}个字符",
-      "n_files": "{{0}}个文件（夹）",
+      "n_chars": "{{0}} 个字符",
+      "n_files": "{{0}} 个文件（夹）",
       "path": "路径",
       "plain_text": "纯文本",
       "rtf": "富文本",
@@ -93,8 +93,8 @@
     "shortcut_key": {
       "common_shortcuts": "常用组合键",
       "double_alt": "双击 Alt",
-      "double_ctrl": "双击 Ctrl",
       "double_click_actions": "双击修饰键",
+      "double_ctrl": "双击 Ctrl",
       "double_shift": "双击 Shift",
       "hints": {
         "click": "点击录制快捷键",
