@@ -107,3 +107,8 @@ body.show-app-icon{
 .nbc-icon {
   display: none;
 }
+
+.item-image{
+  -webkit-user-drag: auto;
+  cursor: pointer;
+}

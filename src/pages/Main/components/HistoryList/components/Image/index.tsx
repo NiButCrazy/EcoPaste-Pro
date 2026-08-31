@@ -30,7 +30,13 @@ const Image = forwardRef<HTMLImageElement, ImageProps>((props, ref) => {
   };
 
   return (
-    <LocalImage onLoad={onLoad} ref={ref} src={value} style={getImageStyle()} />
+    <LocalImage
+      className="item-image"
+      onLoad={onLoad}
+      ref={ref}
+      src={value}
+      style={getImageStyle()}
+    />
   );
 });
 
