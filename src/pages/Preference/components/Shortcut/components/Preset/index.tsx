@@ -22,6 +22,10 @@ const Preset = () => {
       value: ["tab", "shift.tab"],
     },
     {
+      label: "preference.shortcut.preset.copy",
+      value: PRESET_SHORTCUT.COPY,
+    },
+    {
       label: "preference.shortcut.preset.paste",
       value: "enter",
     },

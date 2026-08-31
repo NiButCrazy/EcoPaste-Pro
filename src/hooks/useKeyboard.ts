@@ -14,6 +14,7 @@ const keys = [
   "home",
   PRESET_SHORTCUT.FAVORITE,
   PRESET_SHORTCUT.OPEN_IN_EXPLORER,
+  PRESET_SHORTCUT.COPY,
 ];
 
 interface UseKeyboardProps {
@@ -78,6 +79,12 @@ export const useKeyboard = (props: UseKeyboardProps) => {
       case PRESET_SHORTCUT.OPEN_IN_EXPLORER:
         return eventBus?.emit({
           action: LISTEN_KEY.CLIPBOARD_ITEM_OPEN_IN_EXPLORER,
+          id: activeId,
+        });
+      // 复制条目
+      case PRESET_SHORTCUT.COPY:
+        return eventBus?.emit({
+          action: LISTEN_KEY.CLIPBOARD_ITEM_COPY,
           id: activeId,
         });
     }

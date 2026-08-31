@@ -76,10 +76,10 @@
   "identifier": "com.ayangweb.EcoPaste",
   "mainBinaryName": "EcoPaste",
   "plugins": {
+    "_updater_disabled": "Fork版本禁用自动更新，避免与官方版本冲突",
     "fs": {
       "requireLiteralLeadingDot": false
-    },
-    "_updater_disabled": "Fork版本禁用自动更新，避免与官方版本冲突"
+    }
   },
   "productName": "EcoPaste",
   "version": "../package.json"

@@ -124,6 +124,10 @@ export const useContextMenu = (props: UseContextMenuProps) => {
     revealItemInDir(path);
   };
 
+  const handleCopy = () => {
+    writeToClipboard(data);
+  };
+
   const downloadImage = async () => {
     if (type !== "image") return;
 
@@ -289,7 +293,7 @@ export const useContextMenu = (props: UseContextMenuProps) => {
 
     // 通用菜单项定义
     const copy: ContextMenuItem = {
-      action: () => writeToClipboard(data),
+      action: handleCopy,
       text: t("clipboard.button.context_menu.copy"),
     };
     const paste: ContextMenuItem = {
@@ -672,6 +676,7 @@ export const useContextMenu = (props: UseContextMenuProps) => {
 
   return {
     handleContextMenu,
+    handleCopy,
     handleDelete,
     handleFavorite,
     openToFinder,

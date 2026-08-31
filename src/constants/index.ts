@@ -23,6 +23,7 @@ export const LANGUAGE = {
 export const LISTEN_KEY = {
   ACTIVATE_BACK_TOP: "activate-back-top",
   ACTIVATE_DEFAULT_COLLAPSE: "activate-default-collapse",
+  CLIPBOARD_ITEM_COPY: "clipboard-item-copy",
   CLIPBOARD_ITEM_DELETE: "clipboard-item-delete",
   CLIPBOARD_ITEM_FAVORITE: "clipboard-item-favorite",
   CLIPBOARD_ITEM_OPEN_IN_EXPLORER: "clipboard-item-open-in-explorer",
@@ -43,6 +44,7 @@ export const LISTEN_KEY = {
 };
 
 export const PRESET_SHORTCUT = {
+  COPY: "shift.c",
   FAVORITE: isMac ? "meta.d" : "ctrl.d",
   FIXED_WINDOW: isMac ? "meta.p" : "ctrl.p",
   HIDE_WINDOW: isMac ? "meta.w" : "ctrl.w",

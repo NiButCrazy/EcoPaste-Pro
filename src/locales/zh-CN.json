@@ -539,6 +539,7 @@
       },
       "preset": {
         "back_to_top": "回到顶部",
+        "copy": "复制条目",
         "delete": "删除",
         "favorite": "收藏条目",
         "fixed_window": "固定窗口",

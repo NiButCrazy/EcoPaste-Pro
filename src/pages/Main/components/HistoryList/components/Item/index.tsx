@@ -135,7 +135,7 @@ const Item: FC<ItemProps> = (props) => {
   rootState.eventBus?.useSubscription((payload) => {
     if (payload.id !== id) return;
 
-    const { handleDelete, handleFavorite, openToFinder } = rest;
+    const { handleDelete, handleCopy, handleFavorite, openToFinder } = rest;
 
     switch (payload.action) {
       case LISTEN_KEY.CLIPBOARD_ITEM_PREVIEW:
@@ -152,6 +152,8 @@ const Item: FC<ItemProps> = (props) => {
         return handleFavorite();
       case LISTEN_KEY.CLIPBOARD_ITEM_OPEN_IN_EXPLORER:
         return openToFinder();
+      case LISTEN_KEY.CLIPBOARD_ITEM_COPY:
+        return handleCopy();
     }
   });
 

@@ -237,7 +237,7 @@ const Header: FC<HeaderProps> = (props) => {
   return (
     <div
       className={clsx(
-        "relative flex h-[22px] select-none items-center text-color-2",
+        "relative flex h-[22px] cursor-default! select-none items-center text-color-2",
         {
           "cursor-grab": isSortEnabled,
         },
