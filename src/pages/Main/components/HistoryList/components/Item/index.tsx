@@ -1,6 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { openPath } from "@tauri-apps/plugin-opener";
+import { path } from "@tauri-apps/api";
+import { openPath, openUrl, revealItemInDir } from "@tauri-apps/plugin-opener";
 import { Flex } from "antd";
 import type { HookAPI } from "antd/es/modal/useModal";
 import clsx from "clsx";
@@ -15,6 +16,7 @@ import { useContextMenu } from "@/hooks/useContextMenu";
 import { MainContext } from "@/pages/Main";
 import { pasteToClipboard } from "@/plugins/clipboard";
 import { clipboardStore } from "@/stores/clipboard";
+import { globalStore } from "@/stores/global";
 import type { DatabaseSchemaHistory } from "@/types/database";
 import Files from "../Files";
 import Header from "../Header";
@@ -31,9 +33,11 @@ export interface ItemProps {
   handleEdit: () => void;
 }
 
+const quickLookPath = await path.resolveResource("assets/Bridge.exe");
+
 const Item: FC<ItemProps> = (props) => {
   const { index, data, handleNote, handleEdit } = props;
-  const { id, type, note, value } = data;
+  const { id, type, note, value, subtype } = data;
   const { rootState } = useContext(MainContext);
   const { content } = useSnapshot(clipboardStore);
   const { t } = useTranslation();
@@ -112,10 +116,30 @@ const Item: FC<ItemProps> = (props) => {
     }
   };
 
+  // 使用 QuickLook 预览
   const handlePreview = () => {
-    if (type !== "image") return;
-
-    openPath(value);
+    if (type === "image") {
+      if (globalStore.quicklook.enable) {
+        openPath(`"${value}"`, quickLookPath);
+      } else {
+        openPath(value);
+      }
+    } else if (type === "files") {
+      if (globalStore.quicklook.enable) {
+        openPath(`"${value[0]}"`, quickLookPath);
+      } else {
+        revealItemInDir(value[0]);
+      }
+    } else if (type === "text") {
+      switch (subtype) {
+        case "url":
+          openUrl(value);
+          return;
+        case "path":
+          revealItemInDir(value);
+          return;
+      }
+    }
   };
 
   const handleNext = () => {

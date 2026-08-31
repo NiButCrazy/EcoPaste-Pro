@@ -19,6 +19,10 @@ export interface GlobalStore {
     showTaskbarIcon: boolean;
   };
 
+  quicklook: {
+    enable: boolean;
+  };
+
   // 外观设置
   appearance: {
     theme: Theme;

@@ -12,7 +12,7 @@ import ThemeMode from "./components/ThemeMode";
 import ViewMode from "./components/ViewMode";
 
 const General = () => {
-  const { app, update } = useSnapshot(globalStore);
+  const { app, update, quicklook } = useSnapshot(globalStore);
   const { t } = useTranslation();
 
   // 监听自动启动变更
@@ -93,6 +93,16 @@ const General = () => {
           }}
           title={t("preference.settings.update_settings.label.update_beta")}
           value={update.beta}
+        />
+      </ProList>
+      <ProList header={t("preference.settings.quicklook.title")}>
+        <ProSwitch
+          description={t("preference.settings.quicklook.label.description")}
+          onChange={(value) => {
+            globalStore.quicklook.enable = value;
+          }}
+          title={t("preference.settings.quicklook.label.title")}
+          value={quicklook.enable}
         />
       </ProList>
     </>

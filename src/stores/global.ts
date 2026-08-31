@@ -19,6 +19,10 @@ export const globalStore = proxy<GlobalStore>({
 
   env: {},
 
+  quicklook: {
+    enable: false,
+  },
+
   shortcut: {
     clipboard: "Alt+C",
     mbuttonOpen: {

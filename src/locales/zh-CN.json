@@ -509,6 +509,13 @@
         },
         "title": "权限设置"
       },
+      "quicklook": {
+        "label": {
+          "description": "开启后，将使用 QuickLook 预览图片和文件，请确保后台正在运行 QuickLook",
+          "title": "使用 QuickLook 预览"
+        },
+        "title": "预览设置"
+      },
       "update_settings": {
         "hints": {
           "update_beta": "将会接收测试版更新，即使它们可能不稳定"
