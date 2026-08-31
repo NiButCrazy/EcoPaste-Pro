@@ -112,3 +112,11 @@ body.show-app-icon{
   -webkit-user-drag: auto;
   cursor: pointer;
 }
+
+.item-file{
+  cursor: pointer;
+}
+
+.start-drag{
+  color: var(--ant-blue);
+}

@@ -45,7 +45,8 @@
     "eco-paste:default",
     "eco-autostart:default",
     "eco-webdav:default",
-    "transfer:default"
+    "transfer:default",
+    "drag:default"
   ],
   "windows": ["*"]
 }

@@ -70,6 +70,8 @@ pub fn run() {
                 ])
                 .build(),
         )
+        // 拖拽插件: https://github.com/tauri-apps/tauri-plugin-drag
+        .plugin(tauri_plugin_drag::init())
         // 快捷键插件: https://github.com/tauri-apps/tauri-plugin-global-shortcut
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         // 操作系统相关信息插件：https://github.com/tauri-apps/tauri-plugin-os
