@@ -11,7 +11,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useUpdateEffect } from "ahooks";
-import { FloatButton, Modal } from "antd";
+import { Empty, Flex, FloatButton, Modal } from "antd";
 import clsx from "clsx";
 import { findIndex } from "es-toolkit/compat";
 import { useContext, useEffect, useRef } from "react";
@@ -28,6 +28,22 @@ import { MainContext } from "../..";
 import EditModal, { type EditModalRef } from "./components/EditModal";
 import Item from "./components/Item";
 import NoteModal, { type NoteModalRef } from "./components/NoteModal";
+
+type GroupName = {
+  [key: string]: string;
+};
+
+const group_name: GroupName = {
+  all: "空空如也",
+  code: "暂无代码记录",
+  colors: "暂无颜色记录",
+  email: "暂无邮箱记录",
+  favorite: "暂无收藏记录",
+  files: "暂无文件记录",
+  image: "暂无图片记录",
+  links: "暂无链接记录",
+  text: "暂无文本记录",
+};
 
 const HistoryList = () => {
   const { rootState } = useContext(MainContext);
@@ -59,7 +75,7 @@ const HistoryList = () => {
 
       if (oldIndex < 0 || newIndex < 0) return;
 
-      const activeItem = rootState.list[oldIndex];
+      // const activeItem = rootState.list[oldIndex];
 
       // 重排本地状态列表
       const [movedItem] = rootState.list.splice(oldIndex, 1);
@@ -195,6 +211,19 @@ const HistoryList = () => {
       ref={virtuosoRef}
     />
   );
+
+  if (rootState.list.length === 0)
+    return (
+      <Scrollbar className="flex-1" offsetX={3} ref={scrollerRef}>
+        <Flex justify="center" style={{ height: "85%" }} vertical>
+          <Empty
+            description={
+              rootState.search ? "搜索结果为空" : group_name[rootState.group]
+            }
+          />
+        </Flex>
+      </Scrollbar>
+    );
 
   return (
     <>
