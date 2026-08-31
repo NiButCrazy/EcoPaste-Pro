@@ -527,7 +527,9 @@ export const useContextMenu = (props: UseContextMenuProps) => {
           action: async () => {
             const topItem = rootState.list[0];
             if (topItem && topItem.id !== id) {
-              const topTime = dayjs(topItem.favoriteOrder || topItem.createTime);
+              const topTime = dayjs(
+                topItem.favoriteOrder || topItem.createTime,
+              );
               const now = dayjs();
               const nextTime = formatDate(
                 topTime.isAfter(now) ? topTime.add(1, "second") : now,
@@ -546,10 +548,13 @@ export const useContextMenu = (props: UseContextMenuProps) => {
             const currentItem = rootState.list[index];
             if (prevItem && currentItem) {
               const prevTime = prevItem.favoriteOrder || prevItem.createTime;
-              const currentTime = currentItem.favoriteOrder || currentItem.createTime;
+              const currentTime =
+                currentItem.favoriteOrder || currentItem.createTime;
               if (prevTime === currentTime) {
                 const parsed = dayjs(currentTime);
-                prevItem.favoriteOrder = formatDate(parsed.subtract(1, "second"));
+                prevItem.favoriteOrder = formatDate(
+                  parsed.subtract(1, "second"),
+                );
                 currentItem.favoriteOrder = formatDate(parsed);
               } else {
                 prevItem.favoriteOrder = currentTime;
@@ -574,7 +579,8 @@ export const useContextMenu = (props: UseContextMenuProps) => {
             const currentItem = rootState.list[index];
             if (nextItem && currentItem) {
               const nextTime = nextItem.favoriteOrder || nextItem.createTime;
-              const currentTime = currentItem.favoriteOrder || currentItem.createTime;
+              const currentTime =
+                currentItem.favoriteOrder || currentItem.createTime;
               if (nextTime === currentTime) {
                 const parsed = dayjs(currentTime);
                 currentItem.favoriteOrder = formatDate(
@@ -602,7 +608,9 @@ export const useContextMenu = (props: UseContextMenuProps) => {
           action: async () => {
             const bottomItem = rootState.list[rootState.list.length - 1];
             if (bottomItem && bottomItem.id !== id) {
-              const bottomTime = dayjs(bottomItem.favoriteOrder || bottomItem.createTime);
+              const bottomTime = dayjs(
+                bottomItem.favoriteOrder || bottomItem.createTime,
+              );
               const nextTime = formatDate(bottomTime.subtract(1, "second"));
               const [currentItem] = rootState.list.splice(index, 1);
               currentItem.favoriteOrder = nextTime;
@@ -666,5 +674,6 @@ export const useContextMenu = (props: UseContextMenuProps) => {
     handleContextMenu,
     handleDelete,
     handleFavorite,
+    openToFinder,
   };
 };

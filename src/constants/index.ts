@@ -30,7 +30,6 @@ export const LISTEN_KEY = {
   CLIPBOARD_ITEM_PREVIEW: "clipboard-item-preview",
   CLIPBOARD_ITEM_SELECT_NEXT: "clipboard-item-select-next",
   CLIPBOARD_ITEM_SELECT_PREV: "clipboard-item-select-prev",
-  CLIPBOARD_ITEM_SHOW_ICON: "clipboard-item-show-icon",
   CLOSE_DATABASE: "close-database",
   REFRESH_CLIPBOARD_LIST: "refresh-clipboard-list",
   SHOW_WINDOW: "show-window",
