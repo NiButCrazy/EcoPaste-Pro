@@ -55,7 +55,7 @@ const About = () => {
       <ProListItem
         avatar={<Avatar shape="square" size={44} src="/logo.png" />}
         description={`${t("preference.about.about_software.label.version")}v${env.appVersion}`}
-        title={env.appName}
+        title={`${env.appName} - 魔改版`}
       >
         <Button
           onClick={() => {

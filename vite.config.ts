@@ -1,22 +1,24 @@
-import react from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import UnoCSS from "unocss/vite";
 import { defineConfig } from "vite";
 
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig({
   build: {
     chunkSizeWarningLimit: 8000,
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
+          if (id.includes("node_modules")) {
+            return "vendor";
           }
         },
       },
     },
+    target: "esnext",
   },
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
@@ -30,7 +32,13 @@ export default defineConfig(async () => ({
       },
     },
   },
-  plugins: [react(), UnoCSS()],
+  plugins: [
+    UnoCSS(),
+    react(),
+    babel({
+      presets: [reactCompilerPreset({ target: "18" })],
+    }),
+  ],
   resolve: {
     alias: {
       "@": "/src",
@@ -53,4 +61,4 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
-}));
+});
