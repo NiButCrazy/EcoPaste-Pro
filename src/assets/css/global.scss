@@ -98,6 +98,11 @@ html {
   }
 }
 
+body.show-app-icon{
+  .nbc-icon {
+    display: inline;
+  }
+}
 
 .nbc-icon {
   display: none;

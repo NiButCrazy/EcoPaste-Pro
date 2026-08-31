@@ -13,6 +13,8 @@ const keys = [
   "downarrow",
   "home",
   PRESET_SHORTCUT.FAVORITE,
+  PRESET_SHORTCUT.OPEN_IN_EXPLORER,
+  PRESET_SHORTCUT.SHOW_ICON,
 ];
 
 interface UseKeyboardProps {
@@ -73,6 +75,18 @@ export const useKeyboard = (props: UseKeyboardProps) => {
           action: LISTEN_KEY.CLIPBOARD_ITEM_FAVORITE,
           id: activeId,
         });
+      // 资源管理器中打开
+      case PRESET_SHORTCUT.OPEN_IN_EXPLORER:
+        return eventBus?.emit({
+          action: LISTEN_KEY.CLIPBOARD_ITEM_OPEN_IN_EXPLORER,
+          id: activeId,
+        });
+      // 显示应用来源图标
+      // case PRESET_SHORTCUT.SHOW_ICON:
+      //   return eventBus?.emit({
+      //     action: LISTEN_KEY.CLIPBOARD_ITEM_SHOW_ICON,
+      //     id: activeId,
+      //   })
     }
   };
 

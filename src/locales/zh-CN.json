@@ -31,7 +31,7 @@
         "unfavorite": "取消收藏"
       },
       "pin": "置顶",
-      "setting": "设置",
+      "setting": "偏好设置",
       "unpin": "取消置顶"
     },
     "hints": {
@@ -543,12 +543,14 @@
         "favorite": "收藏条目",
         "fixed_window": "固定窗口",
         "hide_window": "隐藏窗口",
+        "open_in_explorer": "在资源管理器打开",
         "open_preferences": "打开偏好设置",
         "paste": "粘贴",
-        "preview_image": "查看图片",
+        "preview_image": "预览",
         "search": "搜索",
         "select_group": "选择分组",
-        "select_item": "选择条目"
+        "select_item": "选择条目",
+        "show_icon": "显示来源应用图标"
       },
       "shortcut": {
         "hints": {

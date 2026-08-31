@@ -38,6 +38,10 @@ const Preset = () => {
       value: "space",
     },
     {
+      label: "preference.shortcut.preset.open_in_explorer",
+      value: PRESET_SHORTCUT.OPEN_IN_EXPLORER,
+    },
+    {
       label: "preference.shortcut.preset.back_to_top",
       value: "Home",
     },
@@ -52,6 +56,10 @@ const Preset = () => {
     {
       label: "preference.shortcut.preset.hide_window",
       value: ["esc", PRESET_SHORTCUT.HIDE_WINDOW],
+    },
+    {
+      label: "preference.shortcut.preset.show_icon",
+      value: PRESET_SHORTCUT.SHOW_ICON,
     },
   ].map(({ label, value }) => ({
     label,

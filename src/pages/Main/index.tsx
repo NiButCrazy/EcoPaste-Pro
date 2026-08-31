@@ -168,6 +168,10 @@ const Main = () => {
     showWindow("preference");
   });
 
+  useKeyPress(PRESET_SHORTCUT.SHOW_ICON, () => {
+    document.body.classList.toggle("show-app-icon");
+  });
+
   const setQuickPasteKeys = () => {
     const { enable, value } = globalStore.shortcut.quickPaste;
 
