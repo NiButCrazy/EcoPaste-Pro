@@ -58,6 +58,10 @@ pub async fn is_window_visible<R: Runtime>(window: WebviewWindow<R>) -> bool {
 #[command]
 pub async fn set_window_pinned(_pinned: bool) {}
 
+// 设置选区复制/粘贴快捷键拦截状态 (macOS Stub)
+#[command]
+pub async fn set_selection_shortcut_active(_active: bool) {}
+
 // 设置 macos 的 ns_panel 的状态
 pub fn set_macos_panel<R: Runtime>(
     app_handle: &AppHandle<R>,

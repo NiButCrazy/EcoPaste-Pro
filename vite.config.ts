@@ -57,8 +57,9 @@ export default defineConfig({
     port: 1420,
     strictPort: true,
     watch: {
-      // 3. tell vite to ignore watching `src-tauri`
-      ignored: ["**/src-tauri/**"],
+      // 3. tell vite to ignore watching `src-tauri` and cargo build output
+      //    （target 位于仓库根目录，Rust 编译时会锁定构建产物，监听会触发 EBUSY）
+      ignored: ["**/src-tauri/**", "**/target/**"],
     },
   },
 });

@@ -10,8 +10,9 @@ use windows::Win32::UI::WindowsAndMessaging::{
     SetWindowLongPtrW, SetWindowPos, SetWindowsHookExW, ShowWindow, UnhookWindowsHookEx,
     GWL_EXSTYLE, HC_ACTION, HHOOK, KBDLLHOOKSTRUCT, MSLLHOOKSTRUCT, SWP_FRAMECHANGED, SWP_NOMOVE,
     SWP_NOSIZE, SWP_NOZORDER, SW_HIDE, SW_SHOWNOACTIVATE, WH_KEYBOARD_LL, WH_MOUSE_LL, WM_KEYDOWN,
-    WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN, WM_SYSKEYDOWN, WS_EX_NOACTIVATE, HWND_TOPMOST,
-    GetMessageW, MSG, PostThreadMessageW, SWP_NOACTIVATE, SWP_SHOWWINDOW, WM_QUIT,
+    WM_KEYUP, WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN, WM_SYSKEYDOWN, WM_SYSKEYUP,
+    WS_EX_NOACTIVATE, HWND_TOPMOST, GetMessageW, MSG, PostThreadMessageW, SWP_NOACTIVATE,
+    SWP_SHOWWINDOW, WM_QUIT,
 };
 #[cfg(target_os = "windows")]
 use windows::Win32::System::Threading::GetCurrentThreadId;
@@ -21,6 +22,10 @@ struct HookState {
     mouse_hook: Option<HHOOK>,
     kbd_hook: Option<HHOOK>,
     pinned: bool,
+    // 选区工具栏是否处于可见状态（仅此时拦截 Ctrl+C / Ctrl+V）
+    selection_shortcut_active: bool,
+    // 已被拦截且尚未释放的按键，用于过滤长按产生的重复 keydown
+    selection_key_down: Option<u32>,
 }
 #[cfg(target_os = "windows")]
 unsafe impl Send for HookState {}
@@ -32,6 +37,8 @@ static HOOK_STATE: Mutex<HookState> = Mutex::new(HookState {
     mouse_hook: None,
     kbd_hook: None,
     pinned: false,
+    selection_shortcut_active: false,
+    selection_key_down: None,
 });
 #[cfg(target_os = "windows")]
 fn uninstall_hooks_with_handle<R: Runtime>(app_handle: &AppHandle<R>) {
@@ -50,6 +57,8 @@ fn uninstall_hooks_with_handle<R: Runtime>(app_handle: &AppHandle<R>) {
             }
         }
         state.window = None;
+        state.selection_shortcut_active = false;
+        state.selection_key_down = None;
     });
 }
 #[cfg(target_os = "windows")]
@@ -141,7 +150,10 @@ unsafe extern "system" fn low_level_keyboard_proc(
 ) -> LRESULT {
     if code == HC_ACTION as i32 {
         let msg = w_param.0 as u32;
-        if msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN {
+        let is_key_down = msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN;
+        let is_key_up = msg == WM_KEYUP || msg == WM_SYSKEYUP;
+
+        if is_key_down || is_key_up {
             let kbd = *(l_param.0 as *const KBDLLHOOKSTRUCT);
             let vk = kbd.vkCode;
 
@@ -159,73 +171,116 @@ unsafe extern "system" fn low_level_keyboard_proc(
                 };
 
                 if is_visible {
-                    let mut trigger_focus = false;
-                    let mut trigger_action = None;
+                    // 不夺焦模式下窗口没有键盘焦点，选区的 Ctrl+C / Ctrl+V 需要在这里拦截并转发给前端
+                    if vk == 0x43 || vk == 0x56 {
+                        let (shortcut_active, consumed_key) = {
+                            let state = HOOK_STATE.lock().unwrap();
+                            (state.selection_shortcut_active, state.selection_key_down)
+                        };
 
-                    if vk == 0x25 || vk == 0x27 || vk == 0xBF || vk == 0x20 {
-                        // Left, Right, Slash (/), Space
-                        trigger_focus = true;
-                    } else if vk == 0x46 {
-                        // F key
-                        let ctrl_state =
-                            windows::Win32::UI::Input::KeyboardAndMouse::GetKeyState(0x11); // VK_CONTROL
-                        if (ctrl_state as u16 & 0x8000) != 0 {
-                            trigger_focus = true;
-                        }
-                    } else if vk == 0x26 {
-                        // Up Arrow
-                        trigger_action = Some("select_prev");
-                    } else if vk == 0x28 {
-                        // Down Arrow
-                        trigger_action = Some("select_next");
-                    } else if vk == 0x0D {
-                        // Enter
-                        trigger_action = Some("paste_active");
-                    } else if vk == 0x20 {
-                        // Space
-                        trigger_action = Some("preview_active");
-                    } else if vk == 0x1B {
-                        // Escape
-                        if let Ok(hwnd_ptr) = window.hwnd() {
-                            let hwnd = HWND(hwnd_ptr.0 as *mut _);
-                            unsafe {
-                                let _ = ShowWindow(hwnd, SW_HIDE);
+                        if shortcut_active {
+                            if is_key_down {
+                                let ctrl_state =
+                                    windows::Win32::UI::Input::KeyboardAndMouse::GetKeyState(0x11); // VK_CONTROL
+                                let ctrl_down = (ctrl_state as u16 & 0x8000) != 0;
+
+                                if ctrl_down {
+                                    // 过滤长按产生的重复 keydown，只在首次按下时通知前端
+                                    if consumed_key != Some(vk) {
+                                        {
+                                            let mut state = HOOK_STATE.lock().unwrap();
+                                            state.selection_key_down = Some(vk);
+                                        }
+
+                                        let event_name = if vk == 0x43 {
+                                            "selection-copy-shortcut"
+                                        } else {
+                                            "selection-paste-shortcut"
+                                        };
+                                        let _ = window.emit(event_name, ());
+                                    }
+
+                                    return LRESULT(1);
+                                }
+                            } else if consumed_key == Some(vk) {
+                                // 吞掉对应 keyup，避免外部程序收到无配对的按键
+                                let mut state = HOOK_STATE.lock().unwrap();
+                                state.selection_key_down = None;
+                                return LRESULT(1);
                             }
                         }
-                        let _ = window.emit("window_hidden", ());
-                        let app_handle = window.app_handle().clone();
-                        uninstall_hooks_with_handle(&app_handle);
-                        return LRESULT(1);
                     }
 
-                    if trigger_focus {
-                        let _ = window.emit("focus_search_input", ());
+                    // 其余按键逻辑只处理按下事件
+                    if is_key_down {
+                        let mut trigger_focus = false;
+                        let mut trigger_action = None;
 
-                        if let Ok(hwnd_ptr) = window.hwnd() {
-                            let hwnd = HWND(hwnd_ptr.0 as *mut _);
-                            let current_style = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
-                            let new_style = current_style & !(WS_EX_NOACTIVATE.0 as isize);
-                            let _ = SetWindowLongPtrW(hwnd, GWL_EXSTYLE, new_style);
-                            let _ = SetWindowPos(
-                                hwnd,
-                                HWND(std::ptr::null_mut()),
-                                0,
-                                0,
-                                0,
-                                0,
-                                SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED,
-                            );
-                            let _ = SetForegroundWindow(hwnd);
+                        if vk == 0x25 || vk == 0x27 || vk == 0xBF || vk == 0x20 {
+                            // Left, Right, Slash (/), Space
+                            trigger_focus = true;
+                        } else if vk == 0x46 {
+                            // F key
+                            let ctrl_state =
+                                windows::Win32::UI::Input::KeyboardAndMouse::GetKeyState(0x11); // VK_CONTROL
+                            if (ctrl_state as u16 & 0x8000) != 0 {
+                                trigger_focus = true;
+                            }
+                        } else if vk == 0x26 {
+                            // Up Arrow
+                            trigger_action = Some("select_prev");
+                        } else if vk == 0x28 {
+                            // Down Arrow
+                            trigger_action = Some("select_next");
+                        } else if vk == 0x0D {
+                            // Enter
+                            trigger_action = Some("paste_active");
+                        } else if vk == 0x20 {
+                            // Space
+                            trigger_action = Some("preview_active");
+                        } else if vk == 0x1B {
+                            // Escape
+                            if let Ok(hwnd_ptr) = window.hwnd() {
+                                let hwnd = HWND(hwnd_ptr.0 as *mut _);
+                                unsafe {
+                                    let _ = ShowWindow(hwnd, SW_HIDE);
+                                }
+                            }
+                            let _ = window.emit("window_hidden", ());
+                            let app_handle = window.app_handle().clone();
+                            uninstall_hooks_with_handle(&app_handle);
+                            return LRESULT(1);
                         }
-                        let _ = window.set_focus();
 
-                        let app_handle = window.app_handle().clone();
-                        uninstall_hooks_with_handle(&app_handle);
+                        if trigger_focus {
+                            let _ = window.emit("focus_search_input", ());
 
-                        return LRESULT(1);
-                    } else if let Some(event_name) = trigger_action {
-                        let _ = window.emit(event_name, ());
-                        return LRESULT(1); // Consume key!
+                            if let Ok(hwnd_ptr) = window.hwnd() {
+                                let hwnd = HWND(hwnd_ptr.0 as *mut _);
+                                let current_style = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+                                let new_style = current_style & !(WS_EX_NOACTIVATE.0 as isize);
+                                let _ = SetWindowLongPtrW(hwnd, GWL_EXSTYLE, new_style);
+                                let _ = SetWindowPos(
+                                    hwnd,
+                                    HWND(std::ptr::null_mut()),
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED,
+                                );
+                                let _ = SetForegroundWindow(hwnd);
+                            }
+                            let _ = window.set_focus();
+
+                            let app_handle = window.app_handle().clone();
+                            uninstall_hooks_with_handle(&app_handle);
+
+                            return LRESULT(1);
+                        } else if let Some(event_name) = trigger_action {
+                            let _ = window.emit(event_name, ());
+                            return LRESULT(1); // Consume key!
+                        }
                     }
                 }
             }
@@ -283,6 +338,9 @@ pub async fn show_window<R: Runtime>(
             let _ = _app_handle.run_on_main_thread(move || {
                 let mut state = HOOK_STATE.lock().unwrap();
                 state.pinned = pinned.unwrap_or(false);
+                // 窗口重新显示时重置选区快捷键状态，避免残留拦截
+                state.selection_shortcut_active = false;
+                state.selection_key_down = None;
                 // 确保安全，先清理旧钩子
                 if let Some(hook) = state.mouse_hook.take() {
                     unsafe {
@@ -444,6 +502,22 @@ pub async fn set_window_pinned(pinned: bool) {
         let mut state = HOOK_STATE.lock().unwrap();
         state.pinned = pinned;
     }
+}
+
+// 设置选区复制/粘贴快捷键拦截状态
+#[command]
+pub async fn set_selection_shortcut_active(active: bool) {
+    #[cfg(target_os = "windows")]
+    {
+        let mut state = HOOK_STATE.lock().unwrap();
+        state.selection_shortcut_active = active;
+
+        if !active {
+            state.selection_key_down = None;
+        }
+    }
+    #[cfg(not(target_os = "windows"))]
+    let _ = active;
 }
 
 #[cfg(target_os = "windows")]

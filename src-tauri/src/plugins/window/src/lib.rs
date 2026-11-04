@@ -17,6 +17,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             commands::set_window_active_mode,
             commands::is_window_visible,
             commands::set_window_pinned,
+            commands::set_selection_shortcut_active,
             commands::set_mbutton_listener_active
         ])
         .build()

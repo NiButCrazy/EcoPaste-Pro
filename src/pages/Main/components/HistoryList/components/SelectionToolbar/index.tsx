@@ -1,3 +1,4 @@
+import { listen } from "@tauri-apps/api/event";
 import {
   useContext,
   useEffect,
@@ -7,9 +8,10 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { writeText } from "tauri-plugin-clipboard-x-api";
+import { LISTEN_KEY } from "@/constants";
 import { MainContext } from "@/pages/Main";
 import { paste } from "@/plugins/paste";
-import { hideWindow } from "@/plugins/window";
+import { hideWindow, setSelectionShortcutActive } from "@/plugins/window";
 
 interface Position {
   top: number;
@@ -174,21 +176,13 @@ const SelectionToolbar = ({ containerRef }: SelectionToolbarProps) => {
     setVisible(false);
   };
 
-  const handleCopy = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    isClickingToolbar.current = true;
-
+  const copySelection = () => {
     const text = getSelectedText();
     if (text) writeText(text);
     clearSelection();
   };
 
-  const handlePaste = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    isClickingToolbar.current = true;
-
+  const pasteSelection = async () => {
     const text = getSelectedText();
     if (text) {
       await writeText(text);
@@ -202,6 +196,94 @@ const SelectionToolbar = ({ containerRef }: SelectionToolbarProps) => {
       clearSelection();
     }
   };
+
+  const handleCopy = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isClickingToolbar.current = true;
+
+    copySelection();
+  };
+
+  const handlePaste = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isClickingToolbar.current = true;
+
+    await pasteSelection();
+  };
+
+  // 工具栏显示时，支持 Ctrl/Cmd + C / V 触发对应的复制、粘贴操作
+  useEffect(() => {
+    if (!visible) return;
+
+    const handleShortcut = (e: KeyboardEvent) => {
+      // 排除长按重复、输入法组合、Alt/Shift 组合键以及非 Ctrl/Cmd 组合
+      if (e.repeat || e.isComposing || e.altKey || e.shiftKey) return;
+      if (!(e.ctrlKey || e.metaKey)) return;
+
+      const key = e.key.toLowerCase();
+      if (key !== "c" && key !== "v") return;
+
+      // 选区已不在当前容器内时不处理，避免干扰其他区域
+      if (!isSelectionInContainer()) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (key === "c") {
+        copySelection();
+      } else {
+        pasteSelection();
+      }
+    };
+
+    // 使用捕获阶段，优先于页面内的其他键盘监听
+    document.addEventListener("keydown", handleShortcut, true);
+
+    return () => {
+      document.removeEventListener("keydown", handleShortcut, true);
+    };
+  }, [visible]);
+
+  // 不夺焦模式下窗口没有键盘焦点，由 Rust 低级键盘钩子拦截后转发 Ctrl/Cmd + C / V
+  useEffect(() => {
+    if (!visible) return;
+
+    let disposed = false;
+    const unlisteners: Array<() => void> = [];
+
+    setSelectionShortcutActive(true);
+
+    const setup = async () => {
+      const [unlistenCopy, unlistenPaste] = await Promise.all([
+        listen(LISTEN_KEY.SELECTION_COPY_SHORTCUT, () => {
+          if (isSelectionInContainer()) copySelection();
+        }),
+        listen(LISTEN_KEY.SELECTION_PASTE_SHORTCUT, () => {
+          if (isSelectionInContainer()) pasteSelection();
+        }),
+      ]);
+
+      if (disposed) {
+        unlistenCopy();
+        unlistenPaste();
+        return;
+      }
+
+      unlisteners.push(unlistenCopy, unlistenPaste);
+    };
+
+    setup();
+
+    return () => {
+      disposed = true;
+      unlisteners.forEach((unlisten) => {
+        unlisten();
+      });
+      setSelectionShortcutActive(false);
+    };
+  }, [visible]);
 
   if (!visible) return null;
 

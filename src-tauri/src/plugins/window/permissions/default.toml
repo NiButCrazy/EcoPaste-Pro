@@ -8,5 +8,6 @@ permissions = [
     "allow-set-window-active-mode",
     "allow-is-window-visible",
     "allow-set-window-pinned",
+    "allow-set-selection-shortcut-active",
     "allow-set-mbutton-listener-active"
 ]

@@ -33,6 +33,8 @@ export const LISTEN_KEY = {
   CLIPBOARD_ITEM_SELECT_PREV: "clipboard-item-select-prev",
   CLOSE_DATABASE: "close-database",
   REFRESH_CLIPBOARD_LIST: "refresh-clipboard-list",
+  SELECTION_COPY_SHORTCUT: "selection-copy-shortcut",
+  SELECTION_PASTE_SHORTCUT: "selection-paste-shortcut",
   SHOW_WINDOW: "show-window",
   STORE_CHANGED: "store-changed",
   TOGGLE_LISTEN_CLIPBOARD: "toggle-listen-clipboard",

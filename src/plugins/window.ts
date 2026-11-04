@@ -11,10 +11,12 @@ import { getCursorMonitor } from "@/utils/monitor";
 const COMMAND = {
   HIDE_WINDOW: "plugin:eco-window|hide_window",
   IS_WINDOW_VISIBLE: "plugin:eco-window|is_window_visible",
+  SET_SELECTION_SHORTCUT_ACTIVE:
+    "plugin:eco-window|set_selection_shortcut_active",
   SET_WINDOW_ACTIVE_MODE: "plugin:eco-window|set_window_active_mode",
+  SET_WINDOW_PINNED: "plugin:eco-window|set_window_pinned",
   SHOW_TASKBAR_ICON: "plugin:eco-window|show_taskbar_icon",
   SHOW_WINDOW: "plugin:eco-window|show_window",
-  SET_WINDOW_PINNED: "plugin:eco-window|set_window_pinned",
 };
 
 /**
@@ -59,6 +61,14 @@ export const setWindowActiveMode = (active: boolean) => {
 export const setWindowPinned = (pinned: boolean) => {
   invoke(COMMAND.SET_WINDOW_PINNED, { pinned });
 };
+
+/**
+ * 设置选区复制/粘贴快捷键的拦截状态
+ * 不夺焦模式下窗口没有键盘焦点，由 Rust 低级键盘钩子拦截后转发事件
+ */
+export const setSelectionShortcutActive = (active: boolean) => {
+  invoke(COMMAND.SET_SELECTION_SHORTCUT_ACTIVE, { active });
+};
 /**
  * 切换窗口的显示和隐藏
  */
@@ -66,16 +76,19 @@ export const toggleWindowVisible = async () => {
   const appWindow = getCurrentWebviewWindow();
 
   let focused = await appWindow.isFocused();
+  // biome-ignore lint/suspicious/noConsole: debug log
   console.log("[toggleWindowVisible] isFocused:", focused);
 
   if (isLinux || (isWin && clipboardStore.window.noActivate)) {
     // 不夺焦模式下，始终以 OS 层的真实可见状态为准
     // 因为 SW_SHOWNOACTIVATE 绕过了 Tauri 的内部缓存，clipboardStore.window.visible 可能不准确
     focused = await isWindowVisible();
+    // biome-ignore lint/suspicious/noConsole: debug log
     console.log("[toggleWindowVisible] noActivate isVisible:", focused);
   }
 
   if (focused) {
+    // biome-ignore lint/suspicious/noConsole: debug log
     console.log("[toggleWindowVisible] hiding window");
     return hideWindow();
   }
