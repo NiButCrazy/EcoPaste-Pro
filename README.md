@@ -1,125 +1,105 @@
-<a href="https://github.com/3899/EcoPaste-Pro">
-  <img src="https://socialify.git.ci/3899/EcoPaste-Pro/image?description=1&descriptionEditable=%E4%B8%93%E4%B8%BA%20Windows%20%E6%89%93%E9%80%A0%E7%9A%84%E5%BC%80%E6%BA%90%E5%89%AA%E8%B2%B4%E6%9D%BF%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E3%80%82&font=Source%20Code%20Pro&logo=https%3A%2F%2Fgithub.com%2FEcoPasteHub%2FEcoPaste%2Fblob%2Fmaster%2Fpublic%2Flogo.png%3Fraw%3Dtrue&name=1&owner=1&pattern=Floating%20Cogs&theme=Auto" alt="EcoPaste" />
-</a>
-
 <div align="center">
-  <br/>
 
-  <div>
-      简体中文 | <a href="./README.zh-TW.md">繁體中文</a> | <a href="./README.en-US.md">English</a> | <a href="./README.ja-JP.md">日本語</a>
-  </div>
+# EcoPaste-Pro（个人增强版）
 
-  <br/>
-    
-  <div>
-    <a href="https://github.com/3899/EcoPaste-Pro/releases">
-      <img
-        alt="Windows"
-        src="https://img.shields.io/badge/-Windows-blue?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB0PSIxNzI2MzA1OTcxMDA2IiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjE1NDgiIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4Ij48cGF0aCBkPSJNNTI3LjI3NTU1MTYxIDk2Ljk3MTAzMDEzdjM3My45OTIxMDY2N2g0OTQuNTEzNjE5NzVWMTUuMDI2NzU3NTN6TTUyNy4yNzU1NTE2MSA5MjguMzIzNTA4MTVsNDk0LjUxMzYxOTc1IDgwLjUyMDI4MDQ5di00NTUuNjc3NDcxNjFoLTQ5NC41MTM2MTk3NXpNNC42NzA0NTEzNiA0NzAuODMzNjgyOTdINDIyLjY3Njg1OTI1VjExMC41NjM2ODE5N2wtNDE4LjAwNjQwNzg5IDY5LjI1Nzc5NzUzek00LjY3MDQ1MTM2IDg0Ni43Njc1OTcwM0w0MjIuNjc2ODU5MjUgOTE0Ljg2MDMxMDEzVjU1My4xNjYzMTcwM0g0LjY3MDQ1MTM2eiIgcC1pZD0iMTU0OSIgZmlsbD0iI2ZmZmZmZiI+PC9wYXRoPjwvc3ZnPg=="
-      />
-    </a >
-    <a href="./LICENSE">
-      <img
-        src="https://img.shields.io/github/license/3899/EcoPaste-Pro?style=flat-square"
-      />
-    </a >
-    <a href="https://github.com/3899/EcoPaste-Pro/releases">
-      <img
-        src="https://img.shields.io/github/package-json/v/3899/EcoPaste-Pro?style=flat-square"
-      />
-    </a >
-    <a href="https://github.com/3899/EcoPaste-Pro/releases">
-      <img
-        src="https://img.shields.io/github/downloads/3899/EcoPaste-Pro/total?style=flat-square"
-      />  
-    </a >
-  </div>
+**基于 [EcoPasteHub/EcoPaste](https://github.com/EcoPasteHub/EcoPaste) 与 [3899/EcoPaste-Pro](https://github.com/3899/EcoPaste-Pro) 的 Windows 剪贴板工具个人分支**
+
+[![Windows](https://img.shields.io/badge/平台-Windows-blue?style=flat-square)](https://github.com/NiButCrazy/EcoPaste-Pro/releases)
+[![License](https://img.shields.io/github/license/NiButCrazy/EcoPaste-Pro?style=flat-square)](./LICENSE)
+[![Version](https://img.shields.io/github/package-json/v/NiButCrazy/EcoPaste-Pro?style=flat-square)](https://github.com/NiButCrazy/EcoPaste-Pro/releases)
+[![Downloads](https://img.shields.io/github/downloads/NiButCrazy/EcoPaste-Pro/total?style=flat-square)](https://github.com/NiButCrazy/EcoPaste-Pro/releases)
+
+[下载最新版本](https://github.com/NiButCrazy/EcoPaste-Pro/releases/latest) · [问题反馈](https://github.com/NiButCrazy/EcoPaste-Pro/issues)
+
 </div>
 
-# EcoPaste-Pro - 专为 Windows 打造的智能剪贴板管理中枢
+> 本文件只记录**本仓库相对上游新增或修改的功能**。剪贴板管理、内容识别、WebDAV 备份、局域网同步、存储统计等上游原有能力不再重复罗列，详见下方「与上游的关系」。
 
-> **🌟 分支说明**：本仓库是 [EcoPasteHub/EcoPaste](https://github.com/EcoPasteHub/EcoPaste) 的 Fork 增强分支。在官方原版基础上，专为 **Windows** 桌面环境深度重构，全面升级了跨设备数据同步、WebDAV 资产级安全云备份、全景存储统计大盘与智能空间管家，并重构了 12 类内容智能分类识别引擎与日常交互的沉浸式体验。
+## ✨ 本仓库新增与修改
 
-EcoPaste-Pro 基于 **Tauri v2** 与 **React 18** 构建，深度融合 Win32 原生系统能力，具备极低资源占用、瞬时呼出与原生级系统融合度。坚持数据 100% 本地留存与 Windows 凭据管理器硬件级加密，让剪贴板成为您在 Windows 平台高效心流工作的第二大脑。
+### 🔍 QuickLook 预览
 
----
+- 新增「使用 QuickLook 预览」开关（偏好设置 → 通用 → 预览设置）。
+- 开启后，按 `Space` 预览图片或文件时改为调用 QuickLook，通过内置的 `Bridge.exe` 完成预览。
+- 需要本机正在运行 QuickLook；未开启时保持原有行为（图片用默认程序打开、文件在资源管理器中定位）。
+- `Space` 预览同时支持文本条目中的 URL 链接与本地路径：链接用浏览器打开，路径在资源管理器中定位。
 
-## 📖 文档导航
+### 🖱️ 文件与图片拖拽
 
-* 🚀 **[安装与配置指南](./docs/install.md)**：Windows 安装步骤、Win+V 原生无缝接管、鼠标中键控制与快捷键方案。
-* 📜 **[版本更新记录](./docs/changelog.md)**：从 Pro.5.x 到 M01.x 各阶段完整更新履历、特性发布与 Bug 修复明细。
-* ⚙️ **[运行环境与数据存储](./docs/environment.md)**：Windows 运行环境、SQLite 数据库模型、Windows 凭据安全存储与自动收缩维护。
-* 🛠️ **[开发者指南](./docs/developer.md)**：Tauri v2 + React 18 工程目录结构、本地编译构建流程、Win32 核心 Rust 插件深度剖析。
-* 🔄 **[数据同步与移动端指南](./docs/sync.md)**：局域网 HTTP 自动接收 API 规范、主动 Webhook 推送策略、防回环算法与安卓 Tasker 互通配置。
+- 图片条目可直接拖出到桌面、聊天窗口等支持文件拖放的位置。
+- 文件条目中的文件可直接拖出到资源管理器及其他应用（基于 `@crabnebula/tauri-plugin-drag`）。
 
----
+### 📄 空状态页
 
-## ✨ 核心特性全景
+- 列表为空时按当前分类显示对应提示，例如「暂无代码记录」「暂无图片记录」「搜索结果为空」等，不再是空白列表。
 
-| 功能模块 | 核心能力亮点 |
-| :--- | :--- |
-| 📋 **智能类型识别矩阵** | 覆盖纯文本、富文本、HTML、图片、文件、Markdown、链接、路径、代码、邮箱、颜色、指令 **12 大内容分类**；内置办公表格复合数据四维探测引擎、SVG 智能解析、代码语法高亮与 CMYK/RGB 颜色实时提取。 |
-| 🖥️ **双布局与沉浸式交互** | 提供「经典顶栏」与全新「侧边导航」双视图；支持 **Windows 不夺焦静默粘贴模式**（编辑不中断、双击即粘贴）；支持 **鼠标中键全局控制**、**双击修饰键（Ctrl/Alt/Shift）唤醒** 与 **Win+V 原生无缝接管**。 |
-| 📊 **全景存储空间管家** | 独创多维存储大盘，直观透视 12 类数据体积分布；采用开方平滑算法平衡长尾数据；支持全局时间线智能过滤、按类型一键清理并**深度联动删除本地图片文件**，配套 SQLite 自动收缩（Auto VACUUM）。 |
-| ☁️ **WebDAV 资产级云备份** | 支持坚果云、NextCloud 等私有云；解耦「完整备份」与「精简备份」双规则；内置**定时 / 间隔 / Cron 表达式**自动化调度引擎；服务器密码采用 Windows 凭据管理器（DPAPI 硬件级加密）安全存储。 |
-| 📱 **多端互联与轻量同步** | 内置本地 HTTP 接收服务（`POST /api/write`），支持手机通过自动化工具（Tasker / Shortcuts）直接写入 PC 剪贴板；配备**防同步回环指纹保护**与 5 种图片中转策略，支持仅收藏推送与自定义标签推送。 |
-| 🔒 **纯本地隐私与数据安全** | 坚持严格的本地优先原则，零网络遥测与用户行为探针；底层数据库采用单一事实来源设计，具备极佳的跨版本向下兼容与容错能力。 |
+### ⌨️ 快捷键增强
 
----
+| 快捷键 | 功能 |
+| --- | --- |
+| `Shift + C` | 复制当前选中条目 |
+| `Alt + F` | 打开路径 / 在资源管理器中定位文件；系统指令直接执行 |
+| `Ctrl + Q` | 显示 / 隐藏条目来源应用图标（默认隐藏） |
+| `Ctrl + C` / `Ctrl + V` | 在条目内选中文本后，复制 / 粘贴选中的文本 |
 
-## 🖼️ 界面预览
+> 选中文本的 `Ctrl + C` / `Ctrl + V` 在 Windows「不夺焦模式」下同样可用：窗口没有键盘焦点时由 Rust 低级键盘钩子拦截并转发，常规模式下则走页面内键盘事件。
 
-<div align="center">
-  <h4>剪贴板主窗口 (侧边导航与分类筛选)</h4>
-  <img src="./static/Clipboard.png" width="92%" alt="Clipboard" />
-  <br/><br/>
+### 🔊 新复制音效
 
-  <h4>偏好设置 - 剪贴板与窗口模式</h4>
-  <img src="./static/Settings - Clipboard.png" width="92%" alt="Settings Clipboard" />
-  <br/><br/>
+- 替换为新的复制提示音；旧音效保留为 `copy.old.mp3`。
 
-  <h4>全景存储统计 - 多维空间分析与时间线</h4>
-  <img src="./static/Settings - Storage Statistics.png" width="92%" alt="Storage Statistics" />
-  <br/><br/>
+### 🎨 细节调整
 
-  <h4>偏好设置 - 快捷键录制与中键控制</h4>
-  <img src="./static/Settings - Shortcuts.png" width="92%" alt="Shortcuts" />
-  <br/><br/>
+- 文本选中高亮改为半透明蓝色，避免文字颜色被覆盖。
+- 调整字数 / 文件数文案间距、来源图标默认隐藏等细节。
+- 「关于」页面显示「魔改版」标识。
 
-  <h4>数据备份 - WebDAV 云端备份与调度</h4>
-  <img src="./static/Settings - Data Backup.png" width="92%" alt="Data Backup" />
-  <br/><br/>
+### 🛠️ 构建环境升级
 
-  <h4>数据同步 - 局域网接收与 Webhook 推送</h4>
-  <img src="./static/Settings - Data Sync.png" width="92%" alt="Data Sync" />
-</div>
+- Vite 8 + `@vitejs/plugin-react` 6。
+- 接入 React Compiler（`babel-plugin-react-compiler`），构建目标为 `esnext`。
+- 同步更新相关构建依赖与锁文件。
 
----
+## 📥 下载与安装
 
-## 📥 下载与快速开始
+- 前往 [GitHub Releases](https://github.com/NiButCrazy/EcoPaste-Pro/releases/latest) 下载 Windows 安装包（NSIS `.exe`）。
+- 本分支已禁用自动更新，升级时请手动下载新版本覆盖安装。
 
-### 🔗 本 Fork 增强分支
-- 🚀 **最新构建下载**：[前往 GitHub Releases 下载 Windows 最新安装包](https://github.com/3899/EcoPaste-Pro/releases/latest)
-- 📖 **配置与使用手册**：
-  - [Windows 安装与配置指南](./docs/install.md)
-  - [安卓手机 Tasker 同步指南](./docs/Android/README.md)
+## 💻 本地构建
 
-### 🔗 官方原版
-- 🌐 GitHub 主页：[EcoPasteHub/EcoPaste](https://github.com/EcoPasteHub/EcoPaste)
-- 📥 官方下载：[EcoPaste Releases](https://github.com/EcoPasteHub/EcoPaste/releases)
-- 📚 官方文档：[EcoPaste 官网](https://ecopaste.cn/)
+环境要求：Windows 10 1809+ / Windows 11、Node.js 18+（推荐 20 / 22）、pnpm、Rust stable（`x86_64-pc-windows-msvc`）、Visual Studio C++ 生成工具、WebView2 Runtime。
 
----
+```bash
+pnpm install
 
-## 🤝 社区交流与问题反馈
+pnpm tauri dev      # 开发调试
+pnpm tauri build    # 构建安装包
+```
 
-1. 🔍 **常见问题排查**：建议优先查阅 [安装与配置指南](./docs/install.md) 或浏览已有 [Issues 讨论](https://github.com/3899/EcoPaste-Pro/issues)。
-2. ❓ **提交 Issue**：如遇到 Bug、异常崩溃或有新功能构想，欢迎[提交新的 Issue](https://github.com/3899/EcoPaste-Pro/issues/new/choose)，请尽可能附上系统版本（Windows 10/11）、复现步骤及运行日志，以便快速定位。
+构建产物位于 `target/release/bundle/nsis/`。
 
----
+## 🔗 与上游的关系
 
-## 📄 开源许可与致谢
+本仓库是 [3899/EcoPaste-Pro](https://github.com/3899/EcoPaste-Pro) 的个人增强分支，后者是 [EcoPasteHub/EcoPaste](https://github.com/EcoPasteHub/EcoPaste) 的 Windows 增强版本。
 
-- 本项目基于 [GPL-3.0 许可证](./LICENSE) 开源。
-- 感谢上游核心项目 [EcoPasteHub/EcoPaste](https://github.com/EcoPasteHub/EcoPaste) 提供的出色设计与底座支持。
-- 本项目中“独立群组与颜色直出”、“二次沉浸编辑”、“高亮代码语法预览”、“数据来源截取”与“原生快速访问”等功能思路借鉴自 [EcoPaste-Sync](https://github.com/Ruszero01/EcoPaste-Sync)，特此鸣谢！
+以下能力来自上游，本仓库未做改动：
+
+- 剪贴板历史记录、搜索、收藏、分组与多种内容类型识别
+- WebDAV 云端备份与自动备份调度
+- 局域网 HTTP 接收、Webhook / Bark 推送与防回环处理
+- 存储统计、数据库维护与清理
+- Windows 不夺焦窗口、Win+V 接管、鼠标中键 / 双击修饰键唤醒等
+
+上游文档与说明请参考：
+
+- [EcoPaste 官方仓库](https://github.com/EcoPasteHub/EcoPaste)
+- [EcoPaste-Pro 上游仓库](https://github.com/3899/EcoPaste-Pro)
+
+## 📄 开源许可
+
+本项目基于 [GPL-3.0](./LICENSE) 开源，与上游项目保持一致。
+
+## 🙏 致谢
+
+- 感谢 [EcoPasteHub/EcoPaste](https://github.com/EcoPasteHub/EcoPaste) 提供的优秀底座与设计。
+- 感谢 [3899/EcoPaste-Pro](https://github.com/3899/EcoPaste-Pro) 提供的 Windows 增强实现。
