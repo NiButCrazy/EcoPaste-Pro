@@ -112,6 +112,20 @@ mod win32_hook {
                     let lwin_down = (GetAsyncKeyState(0x5B) as u16 & 0x8000) != 0;
                     let rwin_down = (GetAsyncKeyState(0x5C) as u16 & 0x8000) != 0;
                     if lwin_down || rwin_down {
+                        // 仅在“纯 Win+V”时接管；Ctrl/Alt/Shift + Win + V 应放行给前台应用
+                        let ctrl_down = (GetAsyncKeyState(0x11) as u16 & 0x8000) != 0; // VK_CONTROL
+                        let alt_down = (GetAsyncKeyState(0x12) as u16 & 0x8000) != 0; // VK_MENU
+                        let shift_down = (GetAsyncKeyState(0x10) as u16 & 0x8000) != 0; // VK_SHIFT
+
+                        if ctrl_down || alt_down || shift_down {
+                            return CallNextHookEx(
+                                std::ptr::null_mut(),
+                                code,
+                                w_param,
+                                l_param,
+                            );
+                        }
+
                         if msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN {
                             keybd_event(0xE8, 0, 0, 0);
                             keybd_event(0xE8, 0, 2, 0);
