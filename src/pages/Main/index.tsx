@@ -13,6 +13,7 @@ import { useRegister } from "@/hooks/useRegister";
 import { useSubscribeKey } from "@/hooks/useSubscribeKey";
 import { useTauriListen } from "@/hooks/useTauriListen";
 import {
+  isCopySoundSuppressed,
   markInternalClipboardWrite,
   pasteToClipboard,
 } from "@/plugins/clipboard";
@@ -100,6 +101,9 @@ const Main = () => {
   useClipboard(state, {
     beforeRead() {
       if (!clipboardStore.audio.copy) return;
+
+      // 粘贴已有条目时不再播放复制音效；标记会在本次事件后立即消费
+      if (isCopySoundSuppressed()) return;
 
       audioRef.current?.play();
     },

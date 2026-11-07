@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { writeText } from "tauri-plugin-clipboard-x-api";
 import { LISTEN_KEY } from "@/constants";
 import { MainContext } from "@/pages/Main";
+import { markCopySoundSuppressed } from "@/plugins/clipboard";
 import { paste } from "@/plugins/paste";
 import { hideWindow, setSelectionShortcutActive } from "@/plugins/window";
 
@@ -185,6 +186,7 @@ const SelectionToolbar = ({ containerRef }: SelectionToolbarProps) => {
   const pasteSelection = async () => {
     const text = getSelectedText();
     if (text) {
+      markCopySoundSuppressed(false);
       await writeText(text);
       clearSelection();
       // 窗口置顶（钉住）时不关闭窗口

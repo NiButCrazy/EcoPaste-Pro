@@ -61,7 +61,55 @@ export const getClipboardTextSubtype = async (value: string) => {
   }
 };
 
-export const markInternalClipboardWrite = (isImage = false) => {
+// 仅抑制复制音效，不影响内部写入/回声拦截与历史记录逻辑
+export const markCopySoundSuppressed = (isImage = false) => {
+  (window as any).__ecoPasteSuppressCopySound = true;
+  if ((window as any).__ecoPasteSoundTimeout) {
+    clearTimeout((window as any).__ecoPasteSoundTimeout);
+  }
+  // 兜底：若写入没有触发剪贴板事件，避免标记长期残留
+  (window as any).__ecoPasteSoundTimeout = setTimeout(() => {
+    (window as any).__ecoPasteSuppressCopySound = false;
+  }, 1000);
+
+  // 图片可能会延迟数秒后再次触发剪贴板事件，需要更长的兜底窗口
+  if (isImage) {
+    (window as any).__ecoPasteImageSuppressCopySound = true;
+    if ((window as any).__ecoPasteImageSoundTimeout) {
+      clearTimeout((window as any).__ecoPasteImageSoundTimeout);
+    }
+    (window as any).__ecoPasteImageSoundTimeout = setTimeout(() => {
+      (window as any).__ecoPasteImageSuppressCopySound = false;
+    }, 3000);
+  }
+};
+
+// 由下一次剪贴板事件消费：只压制这一次写入的音效
+export const isCopySoundSuppressed = () => {
+  const win = window as any;
+  const suppressed =
+    win.__ecoPasteSuppressCopySound || win.__ecoPasteImageSuppressCopySound;
+
+  if (!suppressed) return false;
+
+  win.__ecoPasteSuppressCopySound = false;
+  win.__ecoPasteImageSuppressCopySound = false;
+  if (win.__ecoPasteSoundTimeout) clearTimeout(win.__ecoPasteSoundTimeout);
+  if (win.__ecoPasteImageSoundTimeout) {
+    clearTimeout(win.__ecoPasteImageSoundTimeout);
+  }
+
+  return true;
+};
+
+export const markInternalClipboardWrite = (
+  isImage = false,
+  action: "copy" | "paste" = "copy",
+) => {
+  if (action === "paste") {
+    markCopySoundSuppressed(isImage);
+  }
+
   (window as any).__isEcoPastePasting = true;
   if ((window as any).__ecoPastePasteTimeout) {
     clearTimeout((window as any).__ecoPastePasteTimeout);
@@ -82,8 +130,11 @@ export const markInternalClipboardWrite = (isImage = false) => {
   }
 };
 
-export const writeToClipboard = (data: DatabaseSchemaHistory) => {
-  markInternalClipboardWrite(data.type === "image");
+export const writeToClipboard = (
+  data: DatabaseSchemaHistory,
+  action: "copy" | "paste" = "copy",
+) => {
+  markInternalClipboardWrite(data.type === "image", action);
   const { type, value, search } = data;
 
   switch (type) {
@@ -109,14 +160,14 @@ export const pasteToClipboard = async (
   const { pastePlain } = clipboardStore.content;
 
   if (asPlain ?? pastePlain) {
-    markInternalClipboardWrite(type === "image");
+    markInternalClipboardWrite(type === "image", "paste");
     if (type === "files") {
       await writeText(value.join("\n"));
     } else {
       await writeText(search);
     }
   } else {
-    await writeToClipboard(data);
+    await writeToClipboard(data, "paste");
   }
 
   // 图片粘贴时，回声路径因文件名不同无法走 matched 置顶，在此处主动置顶

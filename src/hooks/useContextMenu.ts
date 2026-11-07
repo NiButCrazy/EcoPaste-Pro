@@ -15,7 +15,11 @@ import { useSnapshot } from "valtio";
 import { deleteHistory, updateHistory } from "@/database/history";
 import { MainContext } from "@/pages/Main";
 import type { ItemProps } from "@/pages/Main/components/HistoryList/components/Item";
-import { pasteToClipboard, writeToClipboard } from "@/plugins/clipboard";
+import {
+  markCopySoundSuppressed,
+  pasteToClipboard,
+  writeToClipboard,
+} from "@/plugins/clipboard";
 import { paste } from "@/plugins/paste";
 import { hideWindow } from "@/plugins/window";
 import { clipboardStore } from "@/stores/clipboard";
@@ -267,6 +271,7 @@ export const useContextMenu = (props: UseContextMenuProps) => {
     const { paste } = await import("@/plugins/paste");
     const { hideWindow } = await import("@/plugins/window");
 
+    markCopySoundSuppressed(false);
     await writeText(result);
     // 窗口置顶（钉住）时不关闭窗口
     if (!rootState.pinned) {
@@ -644,6 +649,7 @@ export const useContextMenu = (props: UseContextMenuProps) => {
         },
         {
           action: async () => {
+            markCopySoundSuppressed(false);
             await writeText(selectedText);
             // 窗口置顶（钉住）时不关闭窗口
             if (!rootState.pinned) {
