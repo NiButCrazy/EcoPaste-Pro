@@ -93,8 +93,8 @@
     "shortcut_key": {
       "common_shortcuts": "Common Combinations",
       "double_alt": "Double Alt",
-      "double_ctrl": "Double Ctrl",
       "double_click_actions": "Double-Click Modifier",
+      "double_ctrl": "Double Ctrl",
       "double_shift": "Double Shift",
       "hints": {
         "click": "Click to record shortcut",
@@ -140,7 +140,19 @@
     "clipboard": {
       "audio_settings": {
         "label": {
-          "copy_audio": "Copy Sound"
+          "attention_audio": "Attention",
+          "close_audio": "Close",
+          "copy_audio": "Copy Sound",
+          "copy_old_audio": "Legacy Copy Sound",
+          "error_audio": "Error",
+          "open_audio": "Open",
+          "paste_audio": "Paste Sound",
+          "ready_audio": "Ready",
+          "select_audio": "Select",
+          "success_audio": "Success",
+          "tap_audio": "Tap",
+          "toggle_audio": "Toggle",
+          "warning_audio": "Warning"
         },
         "title": "Audio Settings"
       },

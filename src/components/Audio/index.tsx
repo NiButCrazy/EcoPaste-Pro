@@ -18,7 +18,10 @@ const Audio = forwardRef<AudioRef, AudioProps>((props, ref) => {
   }));
 
   const playAudio = () => {
-    audioRef.current?.play();
+    if (!audioRef.current) return;
+
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(() => {});
   };
 
   return <audio ref={audioRef} src={src} />;

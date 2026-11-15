@@ -32,6 +32,7 @@ import type {
   DatabaseSchemaHistory,
 } from "@/types/database";
 import type { Store } from "@/types/store";
+import { resolveAudioSource } from "@/utils/audio";
 import { strictDeepAssign } from "@/utils/object";
 import DockMode from "./components/DockMode";
 import StandardMode from "./components/StandardMode";
@@ -77,7 +78,7 @@ const Main = () => {
     pinned: clipboardStore.window.pinned,
   });
   const { shortcut } = useSnapshot(globalStore);
-  const { window } = useSnapshot(clipboardStore);
+  const { audio, window } = useSnapshot(clipboardStore);
   const eventBus = useEventEmitter<EventBusPayload>();
   const audioRef = useRef<AudioRef>(null);
 
@@ -246,7 +247,10 @@ const Main = () => {
         rootState: state,
       }}
     >
-      <Audio ref={audioRef} />
+      <Audio
+        ref={audioRef}
+        src={resolveAudioSource(audio.copySource, "copy")}
+      />
       {window.style === "standard" ? <StandardMode /> : <DockMode />}
     </MainContext.Provider>
   );

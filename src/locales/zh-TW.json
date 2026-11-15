@@ -93,8 +93,8 @@
     "shortcut_key": {
       "common_shortcuts": "常用組合鍵",
       "double_alt": "雙擊 Alt",
-      "double_ctrl": "雙擊 Ctrl",
       "double_click_actions": "雙擊修飾鍵",
+      "double_ctrl": "雙擊 Ctrl",
       "double_shift": "雙擊 Shift",
       "hints": {
         "click": "點擊錄製快速鍵",
@@ -140,7 +140,19 @@
     "clipboard": {
       "audio_settings": {
         "label": {
-          "copy_audio": "複製音效"
+          "attention_audio": "提示音",
+          "close_audio": "關閉音",
+          "copy_audio": "複製音效",
+          "copy_old_audio": "舊版複製音效",
+          "error_audio": "錯誤音",
+          "open_audio": "開啟音",
+          "paste_audio": "貼上音效",
+          "ready_audio": "就緒音",
+          "select_audio": "選擇音",
+          "success_audio": "成功音",
+          "tap_audio": "輕觸音",
+          "toggle_audio": "切換音",
+          "warning_audio": "警告音"
         },
         "title": "音效設定"
       },

@@ -90,8 +90,8 @@
     "shortcut_key": {
       "common_shortcuts": "一般的な組み合わせ",
       "double_alt": "Altのダブルクリック",
-      "double_ctrl": "Ctrlのダブルクリック",
       "double_click_actions": "修飾キーをダブルクリック",
+      "double_ctrl": "Ctrlのダブルクリック",
       "double_shift": "Shiftのダブルクリック",
       "hints": {
         "click": "クリックして入力",
@@ -137,7 +137,19 @@
     "clipboard": {
       "audio_settings": {
         "label": {
-          "copy_audio": "コピーされた音"
+          "attention_audio": "注意音",
+          "close_audio": "閉じる音",
+          "copy_audio": "コピーされた音",
+          "copy_old_audio": "旧バージョンのコピー音",
+          "error_audio": "エラー音",
+          "open_audio": "開く音",
+          "paste_audio": "貼り付け音",
+          "ready_audio": "準備完了音",
+          "select_audio": "選択音",
+          "success_audio": "成功音",
+          "tap_audio": "タップ音",
+          "toggle_audio": "切り替え音",
+          "warning_audio": "警告音"
         },
         "title": "サウンド設定"
       },

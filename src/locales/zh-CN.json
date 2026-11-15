@@ -140,7 +140,19 @@
     "clipboard": {
       "audio_settings": {
         "label": {
-          "copy_audio": "复制音效"
+          "attention_audio": "提示音",
+          "close_audio": "关闭音",
+          "copy_audio": "复制音效",
+          "copy_old_audio": "旧版复制音效",
+          "error_audio": "错误音",
+          "open_audio": "打开音",
+          "paste_audio": "粘贴音效",
+          "ready_audio": "就绪音",
+          "select_audio": "选择音",
+          "success_audio": "成功音",
+          "tap_audio": "轻触音",
+          "toggle_audio": "切换音",
+          "warning_audio": "警告音"
         },
         "title": "音效设置"
       },

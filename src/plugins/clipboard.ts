@@ -11,12 +11,34 @@ import { LISTEN_KEY } from "@/constants";
 import { updateHistory } from "@/database/history";
 import { clipboardStore } from "@/stores/clipboard";
 import type { DatabaseSchemaHistory } from "@/types/database";
+import { resolveAudioSource } from "@/utils/audio";
 import { formatDate } from "@/utils/dayjs";
 import { isColor, isEmail, isMarkdown, isURL } from "@/utils/is";
 import { detectCode } from "@/utils/isCode";
 import { isEnvPath, isShellPath, isSysCommand } from "@/utils/winPaths";
 import { paste } from "./paste";
 import { hideWindow } from "./window";
+
+let pasteAudioElement: HTMLAudioElement | null = null;
+let pasteAudioSrc = "";
+
+export const playPasteSound = () => {
+  if (!clipboardStore.audio.paste || typeof Audio === "undefined") return;
+
+  const src = resolveAudioSource(clipboardStore.audio.pasteSource, "toggle");
+
+  if (!pasteAudioElement) {
+    pasteAudioElement = new Audio();
+  }
+
+  if (pasteAudioSrc !== src) {
+    pasteAudioSrc = src;
+    pasteAudioElement.src = src;
+  }
+
+  pasteAudioElement.currentTime = 0;
+  pasteAudioElement.play().catch(() => {});
+};
 
 export const getClipboardTextSubtype = async (value: string) => {
   try {
@@ -180,6 +202,8 @@ export const pasteToClipboard = async (
   if (!options?.pinned) {
     hideWindow();
   }
+
+  playPasteSound();
 
   return paste();
 };

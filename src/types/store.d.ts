@@ -93,6 +93,9 @@ export interface ClipboardStore {
   // 音效设置
   audio: {
     copy: boolean;
+    copySource: string;
+    paste: boolean;
+    pasteSource: string;
   };
 
   // 搜索框设置

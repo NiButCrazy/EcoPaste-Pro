@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { writeText } from "tauri-plugin-clipboard-x-api";
 import { LISTEN_KEY } from "@/constants";
 import { MainContext } from "@/pages/Main";
-import { markCopySoundSuppressed } from "@/plugins/clipboard";
+import { markCopySoundSuppressed, playPasteSound } from "@/plugins/clipboard";
 import { paste } from "@/plugins/paste";
 import { hideWindow, setSelectionShortcutActive } from "@/plugins/window";
 
@@ -193,6 +193,7 @@ const SelectionToolbar = ({ containerRef }: SelectionToolbarProps) => {
       if (!rootState.pinned) {
         hideWindow();
       }
+      playPasteSound();
       await paste();
     } else {
       clearSelection();

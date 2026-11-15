@@ -18,6 +18,7 @@ import type { ItemProps } from "@/pages/Main/components/HistoryList/components/I
 import {
   markCopySoundSuppressed,
   pasteToClipboard,
+  playPasteSound,
   writeToClipboard,
 } from "@/plugins/clipboard";
 import { paste } from "@/plugins/paste";
@@ -277,6 +278,7 @@ export const useContextMenu = (props: UseContextMenuProps) => {
     if (!rootState.pinned) {
       hideWindow();
     }
+    playPasteSound();
     await paste();
   };
 
@@ -655,6 +657,7 @@ export const useContextMenu = (props: UseContextMenuProps) => {
             if (!rootState.pinned) {
               hideWindow();
             }
+            playPasteSound();
             await paste();
           },
           text: t("clipboard.button.context_menu.paste_selection"),
