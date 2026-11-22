@@ -82,25 +82,66 @@ jobs:
           retention-days: 7
           compression-level: 0
 
+      - name: Generate release notes
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          BUILD_TIME: ${{ steps.version.outputs.build_time }}
+          GIT_DESC: ${{ steps.version.outputs.git_desc }}
+        run: |
+          node - <<'EOF'
+          const fs = require("node:fs");
+
+          const version = process.env.VERSION;
+          const match = version.match(/Pro\.(\d+\.\d+)/);
+          const heading = match ? `### Pro.${match[1]}` : null;
+
+          let changelog = "";
+          if (heading) {
+            const lines = fs
+              .readFileSync("docs/changelog.md", "utf-8")
+              .split(/\r?\n/);
+            const start = lines.findIndex((line) => line.trim() === heading);
+
+            if (start !== -1) {
+              let end = lines.length;
+              for (let i = start + 1; i < lines.length; i += 1) {
+                if (/^#{1,3}\s+/.test(lines[i])) {
+                  end = i;
+                  break;
+                }
+              }
+              changelog = lines.slice(start + 1, end).join("\n").trim();
+            }
+          }
+
+          const notes = `## EcoPaste-Pro 增强版
+
+          ### 📋 版本信息
+          - **版本**: ${version}
+          - **构建时间**: ${process.env.BUILD_TIME}
+          - **Git 描述**: ${process.env.GIT_DESC}
+
+          ### 🆕 更新日志
+          ${changelog || "- 暂无更新日志"}
+
+          ### ⚠️ 注意事项
+          - 此版本禁用了自动更新功能，避免与官方版本冲突
+          - 配置文件与官方版本兼容，可直接替换使用
+          `;
+
+          fs.writeFileSync("release-notes.md", notes);
+          EOF
+
       - name: Create Release
         if: github.event.inputs.create_release != 'false'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
           name: "EcoPaste_v${{ steps.version.outputs.version }}"
-          body: |
-            ## EcoPaste-Pro 增强版
-            
-            ### 📋 版本信息
-            - **版本**: ${{ steps.version.outputs.version }}
-            - **构建时间**: ${{ steps.version.outputs.build_time }}
-            - **Git 描述**: ${{ steps.version.outputs.git_desc }}
-            
-            ### ⚠️ 注意事项
-            - 此版本禁用了自动更新功能，避免与官方版本冲突
-            - 配置文件与官方版本兼容，可直接替换使用
+          body_path: release-notes.md
           draft: false
-          prerelease: true
+          prerelease: false
           files: dist/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
