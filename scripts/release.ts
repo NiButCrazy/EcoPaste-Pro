@@ -1,9 +1,12 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { name, version } from "../package.json";
+import { version } from "../package.json";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// npm 包名与 Cargo 包名不同，版本同步需使用 Cargo 包名
+const CARGO_PACKAGE_NAME = "EcoPaste";
 
 (() => {
   const tomlPath = resolve(__dirname, "..", "src-tauri", "Cargo.toml");
@@ -13,7 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
     let content = readFileSync(path, "utf-8");
 
     const regexp = new RegExp(
-      `(name\\s*=\\s*"${name}"\\s*version\\s*=\\s*)"[^"]+"`,
+      `(name\\s*=\\s*"${CARGO_PACKAGE_NAME}"\\s*version\\s*=\\s*)"[^"]+"`,
     );
 
     content = content.replace(regexp, `$1"${version}"`);
