@@ -13,7 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
     let content = readFileSync(path, "utf-8");
 
     const regexp = new RegExp(
-      `(name\\s*=\\s*"${name}"\\s*version\\s*=\\s*)"(\\d+\\.\\d+\\.\\d+(-\\w+\\.\\d+)?)"`,
+      `(name\\s*=\\s*"${name}"\\s*version\\s*=\\s*)"[^"]+"`,
     );
 
     content = content.replace(regexp, `$1"${version}"`);
