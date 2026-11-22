@@ -472,10 +472,13 @@
     "settings": {
       "app_settings": {
         "hints": {
+          "run_as_admin": "起動のたびに管理者権限を要求します。無効にした後は、通常の権限に戻すためにアプリを再起動してください。",
+          "run_as_admin_failed": "管理者としての起動に失敗しました。もう一度お試しください。",
           "silent_start": "アプリケーションの手動起動時にウィンドウを隠す"
         },
         "label": {
           "auto_start": "ログイン時に起動",
+          "run_as_admin": "管理者として起動",
           "show_menubar_icon": "メニューバーアイコンを表示する",
           "show_taskbar_icon": "タスクバーアイコンを表示する",
           "silent_start": "サイレントブート"

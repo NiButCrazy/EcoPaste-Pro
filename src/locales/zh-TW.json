@@ -475,10 +475,13 @@
     "settings": {
       "app_settings": {
         "hints": {
+          "run_as_admin": "每次啟動時請求管理員權限；關閉後需重新啟動應用才會恢復一般權限",
+          "run_as_admin_failed": "以管理員身分啟動失敗，請重試",
           "silent_start": "手動啟動應用時隱藏視窗"
         },
         "label": {
           "auto_start": "登入時啟動",
+          "run_as_admin": "以管理員身分啟動",
           "show_menubar_icon": "顯示功能表列圖標",
           "show_taskbar_icon": "顯示工作列圖標",
           "silent_start": "靜默啟動"

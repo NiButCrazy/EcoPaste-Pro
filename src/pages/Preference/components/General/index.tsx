@@ -1,11 +1,14 @@
 import { disable, enable, isEnabled } from "@tauri-apps/plugin-autostart";
+import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import { useSnapshot } from "valtio";
 import ProList from "@/components/ProList";
 import ProSwitch from "@/components/ProSwitch";
 import { useImmediateKey } from "@/hooks/useImmediateKey";
+import { restartAsAdmin } from "@/plugins/autostart";
 import { globalStore } from "@/stores/global";
-import { isMac } from "@/utils/is";
+import { isMac, isWin } from "@/utils/is";
+import { saveStore } from "@/utils/store";
 import Language from "./components/Language";
 import MacosPermissions from "./components/MacosPermissions";
 import ThemeMode from "./components/ThemeMode";
@@ -28,6 +31,28 @@ const General = () => {
     }
   });
 
+  // 开启管理员启动：落盘配置后以管理员身份重新启动
+  const handleRunAsAdminChange = async (value: boolean) => {
+    globalStore.app.runAsAdmin = value;
+
+    if (!value) {
+      return;
+    }
+
+    try {
+      await saveStore();
+      await restartAsAdmin();
+    } catch {
+      globalStore.app.runAsAdmin = false;
+
+      await saveStore();
+
+      message.error(
+        t("preference.settings.app_settings.hints.run_as_admin_failed"),
+      );
+    }
+  };
+
   return (
     <>
       {isMac && <MacosPermissions />}
@@ -40,6 +65,17 @@ const General = () => {
           title={t("preference.settings.app_settings.label.auto_start")}
           value={app.autoStart}
         />
+
+        {isWin && (
+          <ProSwitch
+            description={t(
+              "preference.settings.app_settings.hints.run_as_admin",
+            )}
+            onChange={handleRunAsAdminChange}
+            title={t("preference.settings.app_settings.label.run_as_admin")}
+            value={app.runAsAdmin}
+          />
+        )}
 
         <ProSwitch
           description={t("preference.settings.app_settings.hints.silent_start")}

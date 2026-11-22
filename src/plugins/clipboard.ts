@@ -25,7 +25,7 @@ let pasteAudioSrc = "";
 export const playPasteSound = () => {
   if (!clipboardStore.audio.paste || typeof Audio === "undefined") return;
 
-  const src = resolveAudioSource(clipboardStore.audio.pasteSource, "toggle");
+  const src = resolveAudioSource(clipboardStore.audio.pasteSource, "select");
 
   if (!pasteAudioElement) {
     pasteAudioElement = new Audio();

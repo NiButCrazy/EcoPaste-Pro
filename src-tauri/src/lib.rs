@@ -29,10 +29,11 @@ fn expand_env_vars(input: String) -> String {
     result
 }
 
-
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // 管理员重启时先等待旧进程退出，避免被单实例插件拦截
+    tauri_plugin_eco_autostart::wait_for_elevation_restart();
+
     let app = Builder::default()
         .setup(|app| {
             let app_handle = app.handle();

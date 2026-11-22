@@ -81,11 +81,11 @@ const AudioSettings = () => {
     <>
       <Audio
         ref={audioRef}
-        src={resolveAudioSource(audio.copySource, "copy")}
+        src={resolveAudioSource(audio.copySource, "toggle")}
       />
       <Audio
         ref={pasteAudioRef}
-        src={resolveAudioSource(audio.pasteSource, "toggle")}
+        src={resolveAudioSource(audio.pasteSource, "select")}
       />
 
       <ProList header={t("preference.clipboard.audio_settings.title")}>
@@ -97,7 +97,7 @@ const AudioSettings = () => {
               clipboardStore.audio.copySource = value;
             }}
             options={audioOptions}
-            value={audio.copySource ?? "copy"}
+            value={audio.copySource ?? "toggle"}
           />
 
           <UnoIcon
@@ -126,7 +126,7 @@ const AudioSettings = () => {
               clipboardStore.audio.pasteSource = value;
             }}
             options={audioOptions}
-            value={audio.pasteSource ?? "toggle"}
+            value={audio.pasteSource ?? "select"}
           />
 
           <UnoIcon

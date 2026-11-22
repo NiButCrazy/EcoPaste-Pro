@@ -14,15 +14,16 @@ import { useImmediateKey } from "./hooks/useImmediateKey";
 import { useTauriListen } from "./hooks/useTauriListen";
 import { useWindowState } from "./hooks/useWindowState";
 import { getAntdLocale, i18n } from "./locales";
+import { isElevated, restartAsAdmin } from "./plugins/autostart";
 import { hideWindow, showWindow, toggleWindowVisible } from "./plugins/window";
 import { router } from "./router";
 import { globalStore } from "./stores/global";
 import { transferStore } from "./stores/transfer";
 import { startAutoBackupScheduler } from "./utils/autoBackupScheduler";
 import { generateColorVars } from "./utils/color";
-import { isURL } from "./utils/is";
+import { isURL, isWin } from "./utils/is";
 import { getSaveDatabasePath } from "./utils/path";
-import { restoreStore } from "./utils/store";
+import { restoreStore, saveStore } from "./utils/store";
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
@@ -47,6 +48,29 @@ const App = () => {
     await restoreStore();
 
     const appWindow = getCurrentWebviewWindow();
+
+    // 开启管理员启动后，非管理员进程在初始化界面前重新拉起自己
+    if (
+      isWin &&
+      appWindow.label === WINDOW_LABEL.MAIN &&
+      globalStore.app.runAsAdmin
+    ) {
+      const elevated = await isElevated();
+
+      if (!elevated) {
+        try {
+          await restartAsAdmin();
+
+          return;
+        } catch (reason) {
+          globalStore.app.runAsAdmin = false;
+
+          await saveStore();
+
+          error(`Failed to restart as administrator: ${String(reason)}`);
+        }
+      }
+    }
 
     if (
       appWindow.label === WINDOW_LABEL.MAIN &&

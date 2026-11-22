@@ -475,10 +475,13 @@
     "settings": {
       "app_settings": {
         "hints": {
+          "run_as_admin": "Request administrator privileges on every launch. Restart the app after disabling to return to normal privileges.",
+          "run_as_admin_failed": "Failed to start as administrator. Please try again.",
           "silent_start": "Hide windows when launching applications manually"
         },
         "label": {
           "auto_start": "Start at Login",
+          "run_as_admin": "Start as Administrator",
           "show_menubar_icon": "Show Menubar Icon",
           "show_taskbar_icon": "Show Taskbar Icon",
           "silent_start": "Silent Start"

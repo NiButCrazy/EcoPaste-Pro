@@ -249,7 +249,7 @@ const Main = () => {
     >
       <Audio
         ref={audioRef}
-        src={resolveAudioSource(audio.copySource, "copy")}
+        src={resolveAudioSource(audio.copySource, "toggle")}
       />
       {window.style === "standard" ? <StandardMode /> : <DockMode />}
     </MainContext.Provider>

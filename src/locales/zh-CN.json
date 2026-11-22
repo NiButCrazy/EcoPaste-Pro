@@ -479,10 +479,13 @@
     "settings": {
       "app_settings": {
         "hints": {
+          "run_as_admin": "每次启动时请求管理员权限；关闭后需重启应用才会恢复普通权限",
+          "run_as_admin_failed": "以管理员身份启动失败，请重试",
           "silent_start": "手动启动应用时隐藏窗口"
         },
         "label": {
           "auto_start": "登录时启动",
+          "run_as_admin": "以管理员身份启动",
           "show_menubar_icon": "显示菜单栏图标",
           "show_taskbar_icon": "显示任务栏图标",
           "silent_start": "静默启动"

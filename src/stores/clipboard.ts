@@ -3,10 +3,10 @@ import type { ClipboardStore } from "@/types/store";
 
 export const clipboardStore = proxy<ClipboardStore>({
   audio: {
-    copy: false,
-    copySource: "copy",
+    copy: true,
+    copySource: "toggle",
     paste: true,
-    pasteSource: "toggle",
+    pasteSource: "select",
   },
 
   content: {
