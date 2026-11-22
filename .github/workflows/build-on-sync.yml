@@ -41,7 +41,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "git_desc=$GIT_DESC" >> $GITHUB_OUTPUT
           echo "build_time=$BUILD_TIME" >> $GITHUB_OUTPUT
-          echo "file_prefix=EcoPaste_${VERSION}" >> $GITHUB_OUTPUT
+          echo "file_prefix=EcoPaste-Pro_${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -138,7 +138,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
-          name: "EcoPaste_v${{ steps.version.outputs.version }}"
+          name: "EcoPaste-Pro_v${{ steps.version.outputs.version }}"
           body_path: release-notes.md
           draft: false
           prerelease: false
